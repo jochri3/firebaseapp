@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import { Button, Card, CardSection, Input } from './common';
+import { Text } from 'react-native';
 import firebase from 'firebase';
 
 class LoginForm extends Component{
@@ -7,13 +8,28 @@ class LoginForm extends Component{
     super(props);
     this.state={
       email:'',
-      password:''
+      password:'',
+      error:''
     }
   }
 
   onButtonPress(){
     const { email, password} = this.state;
-    firebase.auth().signInWithEmailAndPassword(email, password);
+
+    //Vider le message d'erreur,parce que la on suppose que l'issue de la requete n'est pas encore connue
+    this.setState({ error:"" });
+    
+    //authentification
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch(()=>{
+      //On a mis ce code ici,car dans notre cas,il n'y a pas de formulaire de signin
+      //Donc,si l'authentification echoue,alors on utilise les memes identifiants,mais pour creer un nouveau compte
+      firebase.auth().createUserWithEmailAndPassword(email,password)
+      .catch(err=>{
+        console.log(err);
+        this.setState({error:'Authentication failed'});
+      });
+    });
   }
 
   //Le text input par defaut a une width:0 et height:0,donc par defaut il est invisible
@@ -52,6 +68,10 @@ class LoginForm extends Component{
           />
         </CardSection>
 
+        <Text style={ styles.errorTextStyle }>
+          { this.state.error }
+        </Text>
+
         <CardSection>
           <Button onPress={ this.onButtonPress.bind(this) }>
             Log in
@@ -59,6 +79,14 @@ class LoginForm extends Component{
         </CardSection>
       </Card>
     );
+  }
+}
+
+const styles={
+  errorTextStyle:{
+    fontSize:20,
+    alignSelf:'center',
+    color:'red'
   }
 }
 
