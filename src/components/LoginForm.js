@@ -9,7 +9,8 @@ class LoginForm extends Component{
     this.state={
       email:'',
       password:'',
-      error:''
+      error:'',
+      loading:false
     }
   }
 
@@ -17,7 +18,7 @@ class LoginForm extends Component{
     const { email, password} = this.state;
 
     //Vider le message d'erreur,parce que la on suppose que l'issue de la requete n'est pas encore connue
-    this.setState({ error:"" });
+    this.setState({ error:"" , loading:true});
     
     //authentification
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -30,6 +31,18 @@ class LoginForm extends Component{
         this.setState({error:'Authentication failed'});
       });
     });
+  }
+
+
+  renderButton(){
+    if(this.state.loading){
+      return <Spinner spinnerSize={ "small" } / >
+    }
+      return (
+         <Button onPress={ this.onButtonPress.bind(this) }>
+            Log in
+          </Button>
+      );
   }
 
   //Le text input par defaut a une width:0 et height:0,donc par defaut il est invisible
@@ -73,9 +86,7 @@ class LoginForm extends Component{
         </Text>
 
         <CardSection>
-          <Button onPress={ this.onButtonPress.bind(this) }>
-            Log in
-          </Button>
+         { this.renderButton() }
         </CardSection>
       </Card>
     );
