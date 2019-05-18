@@ -3,18 +3,20 @@ import { View } from 'react-native';
 import firebase from 'firebase';
 import { Header } from './src/components/common/';
 import LoginForm from "./src/components/LoginForm";
+import { CONFIG } from './src/config';
 
 
 class App extends Component{
   componentWillMount(){
+    const { apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId } = CONFIG;
     firebase.initializeApp(
           {
-              apiKey: "AIzaSyCbuJ45V3UtHawfok5x86BHgANgeNZLXZQ",
-              authDomain: "auth-9fe96.firebaseapp.com",
-              databaseURL: "https://auth-9fe96.firebaseio.com",
-              projectId: "auth-9fe96",
-              storageBucket: "auth-9fe96.appspot.com",
-              messagingSenderId: "191985610818"
+              apiKey:apiKey,
+              authDomain,
+              databaseURL,
+              projectId,
+              storageBucket,
+              messagingSenderId
           }
       );
   }

@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import { Button, Card, CardSection, Input } from './common';
+import firebase from 'firebase';
 
 class LoginForm extends Component{
   constructor(props){
@@ -9,6 +10,12 @@ class LoginForm extends Component{
       password:''
     }
   }
+
+  onButtonPress(){
+    const { email, password} = this.state;
+    firebase.auth().signInWithEmailAndPassword(email, password);
+  }
+
   //Le text input par defaut a une width:0 et height:0,donc par defaut il est invisible
   //La propriete "value" n'a pas de valeur lorsque le component s'affiche,mais une fois
   //  que l'utilisateur saisie quelque chose,le composant se reaffiche,et mets dans "value" la valeur contenu dans le state
@@ -46,7 +53,7 @@ class LoginForm extends Component{
         </CardSection>
 
         <CardSection>
-          <Button>
+          <Button onPress={ this.onButtonPress.bind(this) }>
             Log in
           </Button>
         </CardSection>
