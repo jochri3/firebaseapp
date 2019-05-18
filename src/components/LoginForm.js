@@ -22,15 +22,31 @@ class LoginForm extends Component{
     
     //authentification
     firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(this.onLoginSuccess.bind(this))//.bind() : c'est que l'on ne sait pas a l'avance a quel moment elle sera appele,et donc on aimerait ternir compte de son context
     .catch(()=>{
       //On a mis ce code ici,car dans notre cas,il n'y a pas de formulaire de signin
       //Donc,si l'authentification echoue,alors on utilise les memes identifiants,mais pour creer un nouveau compte
       firebase.auth().createUserWithEmailAndPassword(email,password)
-      .catch(err=>{
-        console.log(err);
-        this.setState({error:'Authentication failed'});
-      });
+      .then(this.onLoginSuccess.bind(this))
+      .catch(this.onLoginFailed.bind(this));
     });
+  }
+
+  onLoginSuccess(){
+    window.alert("Authentification reussie");
+    this.setState({ 
+      error:"",
+      email:"",
+      password:"",
+      loading:false
+    });
+  }
+
+  onLoginFailed(){
+    this.setState({
+      error: 'Authentication failed',
+      loading:false
+    })
   }
 
 
