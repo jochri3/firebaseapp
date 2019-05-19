@@ -4,10 +4,10 @@ import React from 'react';
 //	->TouchableOpacity : Fais l'effet transparent du bouton clique
 import { Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ auClick, children }) =>{
+const Button = ({ onPress, children }) =>{
 	const { buttonStyle, textStyle }=styles;
 	return (
-		<TouchableOpacity onPress={ auClick } style={ buttonStyle }>
+		<TouchableOpacity onPress={ onPress } style={ buttonStyle }>
 			<Text style = { textStyle }>{ children }</Text>
 		</TouchableOpacity>
 		);
