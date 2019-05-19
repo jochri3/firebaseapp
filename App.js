@@ -1,14 +1,15 @@
 import React,{ Component } from 'react';
 import { View } from 'react-native';
 import firebase from 'firebase';
-import { Header, Button } from './src/components/common/';
+import { Header, Button, Spinner,CardSection } from './src/components/common/';
 import LoginForm from "./src/components/LoginForm";
 import { CONFIG } from './src/config';
 
 
 class App extends Component{
   state={
-    loggedIn:false
+    // loggedIn:false : avec ceci,on pretend savoir l'etat "signin" de l'utilisateur,alors qu'en realite,on en sait rien
+    loggedIn:null
   }
 
   componentWillMount(){
@@ -37,16 +38,30 @@ class App extends Component{
       });
   }
 
-  onButtonPress(){
-    this.setState({loggedIn:false});
-  }
+  // onButtonPress(){
+  //   this.setState({loggedIn:false});
+  // }
 
   renderContent(){
-    return this.state.loggedIn?
-     <Button>
+    switch(this.state.loggedIn){
+      case true:
+        return (
+          <CardSection>
+            <Button onPress={()=>firebase.auth().signOut()}>
             Log Out
-      </Button>
-    :<LoginForm />;
+        </Button>
+          </CardSection>
+        );
+
+      case false:
+        return <LoginForm /> ;
+
+      default:
+          return <Spinner spinnerSize={"large"} / >
+    }
+    
+     
+    
   }
 
   render(){
